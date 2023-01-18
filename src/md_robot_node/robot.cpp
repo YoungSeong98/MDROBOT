@@ -3,6 +3,9 @@
 #include "md_robot_node/main.hpp"
 #include "md_robot_node/com.hpp"
 #include "md/Pose.h"
+#include <geometry_msgs/Twist.h>
+#include <ros/ros.h>
+#include <std_msgs/Int32.h>
 
 #define VELOCITY_CONSTANT_VALUE         9.5492743       // 이동속도(m/min), v = 바퀴 둘레의 길이 x RPM
                                                         // 이동속도(m/sec), v = (2 x 바퀴 반지름 x (pi / 60) x RPM)
@@ -15,6 +18,9 @@
 
 #define LEFT           	  0      // Swing direction
 #define RIGHT             1
+
+int32_t pos_left;    // ()
+int32_t pos_right; 
 
 static double robot_old_x;
 static double robot_old_y;
@@ -194,8 +200,8 @@ void CalRobotPoseFromPos(PID_PNT_MAIN_DATA_t *pData)
     double robot_curr_y;
     double robot_curr_theta;
 
-    int32_t pos_left;
-    int32_t pos_right;
+    //int32_t pos_left;    
+    //int32_t pos_right;   
     double v_left;
     double v_right;
     double vel_left;
@@ -205,7 +211,7 @@ void CalRobotPoseFromPos(PID_PNT_MAIN_DATA_t *pData)
 
     ros::Time curr_time = ros::Time::now();
 
-    pos_left = pData->mtr_pos_id1;
+    pos_left = pData->mtr_pos_id1;          
     pos_right = pData->mtr_pos_id2;
 
     if(first_cal == false) {
@@ -223,10 +229,11 @@ void CalRobotPoseFromPos(PID_PNT_MAIN_DATA_t *pData)
         return;
     }
 
-#if 0
+
+//#if 0
     ROS_INFO("\r\n");
     ROS_INFO("mtr pos: %d : %d", pos_left, pos_right);
-#endif
+//#endif
 
     interval_time = curr_time.toSec() - previous_time.toSec();
     previous_time = curr_time;
