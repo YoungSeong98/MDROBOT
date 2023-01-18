@@ -49,13 +49,13 @@ int InitSerialComm(void)
     }
 }
 
-uint8_t CalCheckSum(uint8_t *pData, uint16_t length)
+uint16_t CalCheckSum(uint8_t *pData, uint16_t length)
 {
-    uint8_t sum;
+    uint16_t sum;
 
     sum = 0;
     for(int i = 0; i < length; i++) {
-        sum += *pData++;
+        sum += pData[i];
     }
 
     sum = ~sum + 1; //check sum
@@ -330,4 +330,3 @@ int ReceiveDataFromController(void) //Analyze the communication data
 
     return 1;
 }
-
