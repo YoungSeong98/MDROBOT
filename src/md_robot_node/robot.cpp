@@ -230,10 +230,10 @@ void CalRobotPoseFromPos(PID_PNT_MAIN_DATA_t *pData)
     }
 
 
-//#if 0
+#if 0
     ROS_INFO("\r\n");
     ROS_INFO("mtr pos: %d : %d", pos_left, pos_right);
-//#endif
+#endif
 
     interval_time = curr_time.toSec() - previous_time.toSec();
     previous_time = curr_time;
