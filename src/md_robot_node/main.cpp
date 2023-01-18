@@ -2,12 +2,15 @@
 // main.cpp
 // Publisher, Subscrive action added
 #include <geometry_msgs/Twist.h>
-
 #include "md_robot_node/global.hpp"
 #include "md_robot_node/main.hpp"
 #include "md_robot_node/com.hpp"
 #include "md/Pose.h"
 #include <ros/ros.h>
+#include <std_msgs/Int32.h>
+
+extern int32_t pos_left;    // ()
+extern int32_t pos_right; 
 
 ros::Publisher robot_pose_pub;
 md::Pose robot_pose;
@@ -405,11 +408,15 @@ int main(int argc, char** argv)
     ros::NodeHandle nh;        //Node handle declaration for communication with ROS system.
 
     ros::Subscriber keyboard_sub = nh.subscribe("cmd_vel", 10, cmdVelCallBack);
-    ros::Subscriber reset_odom_sub = nh.subscribe("reset_odom", 10, resetOdomCallBack);              //Subscriber declaration.
+    ros::Subscriber reset_odom_sub = nh.subscribe("reset_odom", 10, resetOdomCallBack);                 //Subscriber declaration.
     ros::Subscriber reset_alarm_sub = nh.subscribe("reset_alarm", 10, resetAlarmCallBack);              //Subscriber declaration.
 
+    ros::Publisher right_ticks_pub = nh.advertise<std_msgs::Int32>("right_ticks",1000);
+    ros::Publisher left_ticks_pub = nh.advertise<std_msgs::Int32>("left_ticks",1000);
+    
     robot_pose_pub = nh.advertise<md::Pose>("robot_pose", 10);
 
+    
     int16_t *pGoalRPMSpeed;
 
     reset_odom_flag = false;
@@ -560,7 +567,7 @@ int main(int argc, char** argv)
 
     while(ros::ok())
     {
-        ReceiveDataFromController();
+        ReceiveDataFromController();    //Analyze the communication data
 
         if(appTick > 0) {
             appTick = 0;
@@ -588,6 +595,19 @@ int main(int argc, char** argv)
 
             PutMdData(PID_PNT_VEL_CMD, robotParamData.nRMID, (const uint8_t *)&pid_pnt_vel_cmd, sizeof(pid_pnt_vel_cmd));
         }
+
+        ros::spinOnce();
+        r.sleep();
+    }
+
+    while(ros::ok()){
+        std_msgs::Int32 right_ticks;
+        std_msgs::Int32 left_ticks;
+        right_ticks.data = pos_right;
+        left_ticks.data = pos_left;
+
+        right_ticks_pub.publish(right_ticks);
+        left_ticks_pub.publish(left_ticks);
 
         ros::spinOnce();
         r.sleep();
