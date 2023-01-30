@@ -8,7 +8,7 @@
         <param name = "reverse_direction"           value = "0"/>       <!-- 0: forward, 1: reverse -->
         <param name = "maxrpm"                      value = "1000"/>    <!-- unit: RPM -->
         <param name = "motor_posi"                  value = "0"/>       <!-- motor pisition 0: hall sensor, 1: encoder -->
-        <param name = "encoder_PPR"                 value = "16384"/>   <!-- if use encoder position, encoder PPR -->
+        <param name = "encoder_PPR"                 value = "4096"/>   <!-- if use encoder position, encoder PPR -->
         <param name = "position_proportion_gain"    value = "20"/>      <!-- reference PID 203(PID_GAIN) -->
         <param name = "speed_proportion_gain"       value = "50"/>      <!-- reference PID 203(PID_GAIN) -->
         <param name = "integral_gain"               value = "1800"/>    <!-- reference PID 203(PID_GAIN) -->
